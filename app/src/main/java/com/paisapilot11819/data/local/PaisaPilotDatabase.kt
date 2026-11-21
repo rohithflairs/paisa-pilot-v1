@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
-import com.paisapilot11819.data.local.converter.Converters
 import com.paisapilot11819.data.local.dao.*
 import com.paisapilot11819.data.local.entity.*
 
@@ -23,7 +21,6 @@ import com.paisapilot11819.data.local.entity.*
     version = 1,
     exportSchema = false
 )
-@TypeConverters(Converters::class)
 abstract class PaisaPilotDatabase : RoomDatabase() {
 
     abstract fun monthPlanDao(): MonthPlanDao

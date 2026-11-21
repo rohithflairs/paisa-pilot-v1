@@ -161,3 +161,4 @@ class SetupViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 }
+

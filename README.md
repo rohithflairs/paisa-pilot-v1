@@ -81,3 +81,4 @@ Since Paisa Pilot is 100% offline, a full JSON backup and restore feature is bui
 - Go to **Profile → Data Backup & Restore**.
 - Tap **"Export JSON"** to save your entire database (plans, categories, budgets, expenses, top-ups, recurring rules) to your phone's storage or Google Drive via Android's native file picker.
 - Tap **"Import JSON"** on any device to restore your complete financial history.
+
