@@ -86,17 +86,19 @@ class DashboardViewModel(
                 // Auto-process any pending recurring deductions for this month
                 recurringRepo.processRecurringDeductions(plan.yearMonth, plan.id)
 
-                // Combine all data streams for this month
+                // Combine all data streams for this month (5 streams max for native combine overload)
                 combine(
-                    txRepo.getTotalAddMoneyForMonth(plan.id),
-                    txRepo.getTotalExpensesForMonth(plan.id),
-                    txRepo.getTotalRefundsForMonth(plan.id),
-                    categoryRepo.getBudgetsForMonth(plan.id),
-                    categoryRepo.getAllIncludingArchived(),
+                    txRepo.getAddMoneyForMonth(plan.id),
                     txRepo.getExpensesForMonth(plan.id),
-                    txRepo.getRefundsForMonth(plan.id)
-                ) { addMoneyTotal, totalExp, totalRef, budgets, categories, expenses, refunds ->
+                    txRepo.getRefundsForMonth(plan.id),
+                    categoryRepo.getBudgetsForMonth(plan.id),
+                    categoryRepo.getAllIncludingArchived()
+                ) { addMoneyList, expenses, refunds, budgets, categories ->
                     val catMap = categories.associateBy { it.id }
+
+                    val addMoneyTotal = addMoneyList.sumOf { it.amountPaise }
+                    val totalExp = expenses.sumOf { it.amountPaise }
+                    val totalRef = refunds.sumOf { it.amountPaise }
 
                     // Compute category progress
                     val progressList = budgets.map { budget ->
@@ -151,9 +153,9 @@ class DashboardViewModel(
                     DashboardUiState(
                         monthPlan = plan,
                         openingBalancePaise = plan.openingBalancePaise,
-                        addMoneyTotalPaise = addMoneyTotal ?: 0L,
-                        totalExpensesPaise = totalExp ?: 0L,
-                        totalRefundsPaise = totalRef ?: 0L,
+                        addMoneyTotalPaise = addMoneyTotal,
+                        totalExpensesPaise = totalExp,
+                        totalRefundsPaise = totalRef,
                         categoryProgressList = progressList,
                         todaySpentPaise = todaySpent,
                         thisWeekSpentPaise = thisWeekSpent,
